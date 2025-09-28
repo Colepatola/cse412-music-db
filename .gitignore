@@ -1,0 +1,5 @@
+/db/*.csv
+/.venv/
+/.vscode/
+/.idea/
+*.DS_Store
