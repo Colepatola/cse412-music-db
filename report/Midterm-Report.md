@@ -3,14 +3,20 @@ Course: CSE 412
 Team: Cole Patola, Svar Ajwani, Mohsin Zaidi, Nassim Zitouni
 
 ## 1. ER-to-Relational (DDL)
-(we will paste schema + screenshots here)
+explain here
 
 ## 2. Fill the database with data
-(INSERTs and optional COPY; screenshots)
+explain here
 
 ## 3. SQL Queries
-(INSERT, UPDATE, DELETE, two SELECTs; outputs)
+explain here
 
 ## 4. How to Reproduce
-```bash
-psql -v ON_ERROR_STOP=1 -f demo/phase2_demo.sql
+1. start your db
+
+2. run the following command:
+psql -h /tmp -p 8888 -d "$USER" -v ON_ERROR_STOP=1 \
+  -f demo/phase2_demo.sql \
+  -o report/phase2_output.txt
+
+
