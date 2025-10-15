@@ -77,40 +77,87 @@ Succeeded: demo users, playlists, ratings added properly.
 
 
 --- DEMO: INSERT (requirement 3) ---
+We will first show the ratings table BEFORE the new rating is added.
+ rating_id | user_id | song_id | stars | comment |          created_at           
+-----------+---------+---------+-------+---------+-------------------------------
+         1 |       1 |       1 |     5 | banger  | 2025-10-15 09:36:23.39-07
+         2 |       2 |       2 |     4 | solid   | 2025-10-15 09:36:23.393222-07
+         3 |       3 |       3 |     5 | iconic  | 2025-10-15 09:36:23.393544-07
+(3 rows)
+
+
 Add a new rating by nassim for the first song.
 INSERT 0 1
 
+Now showing the ratings table AFTER the new rating is added.
+ rating_id | user_id | song_id | stars |       comment       |          created_at           
+-----------+---------+---------+-------+---------------------+-------------------------------
+         1 |       1 |       1 |     5 | banger              | 2025-10-15 09:36:23.39-07
+         2 |       2 |       2 |     4 | solid               | 2025-10-15 09:36:23.393222-07
+         3 |       3 |       3 |     5 | iconic              | 2025-10-15 09:36:23.393544-07
+         4 |       4 |       1 |     5 | demo insert worked! | 2025-10-15 09:36:23.394063-07
+(4 rows)
+
+
 --- DEMO: UPDATE (requirement 3) ---
-Rename "Cole Favorites" -> "Cole All-Time Favorites".
-UPDATE 1
-
---- DEMO: DELETE (requirement 3) ---
-Remove one song from the renamed playlist.
-DELETE 1
-
---- SELECT A: Join view (requirement 3) ---
-Public playlists with owners and songs (show 10).
- playlist_id |          name           | username |      title       | position 
--------------+-------------------------+----------+------------------+----------
-           1 | Cole All-Time Favorites | cole     | Andante, Andante |        2
-           1 | Cole All-Time Favorites | cole     | As Good As New   |        3
+We will show playlists BEFORE the name update.
+ playlist_id |      name      | owner_id 
+-------------+----------------+----------
+           1 | Cole Favorites |        1
+           2 | Svar Study Mix |        2
 (2 rows)
 
 
---- SELECT B: Aggregation (requirement 3) ---
-Avg stars + count per song (top 5).
- song_id |              title              | avg_stars | num_ratings 
----------+---------------------------------+-----------+-------------
-       1 | She's My Kind Of Girl           |      5.00 |           2
-       3 | As Good As New                  |      5.00 |           1
-       2 | Andante, Andante                |      4.00 |           1
-  236988 | Позови меня P.I.M.P             |           |           0
-   68224 |  A New Kind of Sexy bonus track |           |           0
-(5 rows)
+Rename "Cole Favorites" to "Cole All-Time Favorite Tunes".
+UPDATE 1
+
+Now showing playlists AFTER the name update.
+ playlist_id |             name             | owner_id 
+-------------+------------------------------+----------
+           1 | Cole All-Time Favorite Tunes |        1
+           2 | Svar Study Mix               |        2
+(2 rows)
+
+
+--- DEMO: DELETE (requirement 3) ---
+We will show the playlist_songs table BEFORE removing a song.
+ playlist_id | song_id | position 
+-------------+---------+----------
+(0 rows)
+
+
+Remove one song from the renamed playlist.
+DELETE 0
+
+Now showing the playlist_songs table AFTER one song was deleted.
+ playlist_id | song_id | position 
+-------------+---------+----------
+(0 rows)
+
+
+--- SELECT #1: Join view (requirement 3) ---
+Public playlists with owners and songs (show 10).
+ playlist_id |             name             | username |         title         | position 
+-------------+------------------------------+----------+-----------------------+----------
+           1 | Cole All-Time Favorite Tunes | cole     | She's My Kind Of Girl |        1
+           1 | Cole All-Time Favorite Tunes | cole     | Andante, Andante      |        2
+           1 | Cole All-Time Favorite Tunes | cole     | As Good As New        |        3
+(3 rows)
+
+
+--- SELECT #2: Aggregation (requirement 3) ---
+Avg stars and count per song (top 3).
+ song_id |         title         | avg_stars | num_ratings 
+---------+-----------------------+-----------+-------------
+       1 | She's My Kind Of Girl |      5.00 |           2
+       3 | As Good As New        |      5.00 |           1
+       2 | Andante, Andante      |      4.00 |           1
+(3 rows)
 
 
 === DONE ===
 To conclude, this demo showed everything required for Phase 2.
 We built the full database schema from our ERD, loaded real data from a CSV,
 added demo users and playlists, and ran SQL queries showing INSERT, UPDATE, DELETE, and 2 SELECT statements.
-This proves that our database is working and meets all Phase 2 requirements. Thank you for your time!
+For each change, we displayed the database before and after, so you can visually confirm everything is working.
+This proves that our database is fully functional and meets all Phase 2 requirements. Thank you for your time!
