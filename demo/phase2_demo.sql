@@ -10,6 +10,7 @@
 \qecho '3) Show INSERT, UPDATE, DELETE and SELECTs.'
 \qecho ''
 
+-- =========================================================================================
 \qecho '--- STEP 1: Build schema (requirement 1) ---'
 \qecho 'Running db/ddl.sql...'
 \qecho 'This file creates all of our tables from the ERD (users, songs, artists, playlists, ratings, genre).'
@@ -18,7 +19,9 @@
 \i db/ddl.sql
 \qecho 'Succeeded: schema, keys, FKs, indexes properly loaded.'
 \qecho ''
+-- =========================================================================================
 
+-- =========================================================================================
 \qecho '--- STEP 2: Load CSV (requirement 2) ---'
 \qecho 'Running db/copy_load.sql...'
 \qecho 'This file loads our Spotify CSV into the database using COPY.'
@@ -50,6 +53,7 @@ SELECT
   (SELECT COUNT(*) FROM music.playlist_songs) AS playlist_songs, -- should be 3 for cole's playlist
   (SELECT COUNT(*) FROM music.ratings)        AS ratings;        -- should be 3 for cole, svar, mohsin, nassim will add one more later through the insert requirement
 \qecho ''
+-- =========================================================================================
 
 -- =========================================================================================
 \qecho '--- DEMO: INSERT (requirement 3) ---'
@@ -70,7 +74,6 @@ VALUES (
 SELECT * FROM music.ratings 
 ORDER BY rating_id; -- should show the new rating at the end
 \qecho ''
--- =========================================================================================
 
 -- =========================================================================================
 \qecho '--- DEMO: UPDATE (requirement 3) ---'
