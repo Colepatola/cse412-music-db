@@ -61,15 +61,17 @@ SELECT
 SELECT * FROM music.ratings 
 ORDER BY rating_id; -- should show 3 ratings currently
 \qecho ''
+
 \qecho 'Add a new rating by nassim for the first song.'
 INSERT INTO music.ratings (user_id, song_id, stars, comment)
 VALUES (
   (SELECT user_id FROM music.users WHERE username = 'nassim'), -- nassim's user_id
   (SELECT song_id FROM music.songs ORDER BY song_id LIMIT 1),  -- first song_id from songs table
-  5,               -- 5 star rating for the song
+  5,                    -- 5 star rating for the song
   'demo insert worked!' -- comment for the song to show our insert worked 
 );
 \qecho ''
+
 \qecho 'Now showing the ratings table AFTER the new rating is added.'
 SELECT * FROM music.ratings 
 ORDER BY rating_id; -- should show the new rating at the end
@@ -78,18 +80,20 @@ ORDER BY rating_id; -- should show the new rating at the end
 -- =========================================================================================
 \qecho '--- DEMO: UPDATE (requirement 3) ---'
 \qecho 'We will show playlists BEFORE the name update.'
-SELECT playlist_id, name, owner_id 
-FROM music.playlists 
+SELECT playlist_id, name, owner_id  -- select relevant columns
+FROM music.playlists  -- from playlists table
 ORDER BY playlist_id; -- should show cole's playlist named "Cole Favorites"
 \qecho ''
+
 \qecho 'Rename "Cole Favorites" to "Cole All-Time Favorite Tunes".'
-UPDATE music.playlists
-SET name = 'Cole All-Time Favorite Tunes'
-WHERE name = 'Cole Favorites';
-\qecho ''
+UPDATE music.playlists -- update playlists table
+SET name = 'Cole All-Time Favorite Tunes' -- new name
+WHERE name = 'Cole Favorites'; -- condition to find cole's original playlist
+\qecho '' 
+
 \qecho 'Now showing playlists AFTER the name update.'
-SELECT playlist_id, name, owner_id 
-FROM music.playlists 
+SELECT playlist_id, name, owner_id -- select relevant columns
+FROM music.playlists  -- from playlists table
 ORDER BY playlist_id; -- should show cole's playlist with the new name
 \qecho ''
 -- =========================================================================================
@@ -97,23 +101,26 @@ ORDER BY playlist_id; -- should show cole's playlist with the new name
 -- =========================================================================================
 \qecho '--- DEMO: DELETE (requirement 3) ---'
 \qecho 'We will show the playlist_songs table BEFORE removing a song.'
-SELECT * FROM music.playlist_songs
-WHERE playlist_id = (SELECT playlist_id FROM music.playlists WHERE name = 'Cole All-Time Favorites')
+SELECT * FROM music.playlist_songs -- all songs in cole's playlist
+WHERE playlist_id = (SELECT playlist_id FROM music.playlists WHERE name = 'Cole All-Time Favorite Tunes') -- get cole's renamed playlist id
 ORDER BY position; -- should show 3 songs in cole's renamed playlist
 \qecho ''
+
 \qecho 'Remove one song from the renamed playlist.'
-DELETE FROM music.playlist_songs
-WHERE playlist_id = (SELECT playlist_id FROM music.playlists WHERE name = 'Cole All-Time Favorites')
-  AND song_id IN (
-    SELECT song_id
-    FROM music.playlist_songs
-    WHERE playlist_id = (SELECT playlist_id FROM music.playlists WHERE name = 'Cole All-Time Favorites')
-    LIMIT 1
+DELETE FROM music.playlist_songs -- delete from cole's renamed playlist
+WHERE playlist_id = (SELECT playlist_id FROM music.playlists WHERE name = 'Cole All-Time Favorite Tunes') -- get cole's renamed playlist id
+  AND song_id IN 
+  (
+    SELECT song_id -- get one song_id to delete
+    FROM music.playlist_songs -- from cole's renamed playlist
+    WHERE playlist_id = (SELECT playlist_id FROM music.playlists WHERE name = 'Cole All-Time Favorite Tunes') -- get cole's renamed playlist id
+    LIMIT 1 
   );
 \qecho ''
+
 \qecho 'Now showing the playlist_songs table AFTER one song was deleted.'
-SELECT * FROM music.playlist_songs
-WHERE playlist_id = (SELECT playlist_id FROM music.playlists WHERE name = 'Cole All-Time Favorites')
+SELECT * FROM music.playlist_songs -- all songs in cole's renamed playlist
+WHERE playlist_id = (SELECT playlist_id FROM music.playlists WHERE name = 'Cole All-Time Favorite Tunes')
 ORDER BY position; -- should show 2 songs now in cole's renamed playlist
 \qecho ''
 -- =========================================================================================

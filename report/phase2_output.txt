@@ -80,9 +80,9 @@ Succeeded: demo users, playlists, ratings added properly.
 We will first show the ratings table BEFORE the new rating is added.
  rating_id | user_id | song_id | stars | comment |          created_at           
 -----------+---------+---------+-------+---------+-------------------------------
-         1 |       1 |       1 |     5 | banger  | 2025-10-15 09:36:23.39-07
-         2 |       2 |       2 |     4 | solid   | 2025-10-15 09:36:23.393222-07
-         3 |       3 |       3 |     5 | iconic  | 2025-10-15 09:36:23.393544-07
+         1 |       1 |       1 |     5 | banger  | 2025-10-18 15:06:47.741668-07
+         2 |       2 |       2 |     4 | solid   | 2025-10-18 15:06:47.742512-07
+         3 |       3 |       3 |     5 | iconic  | 2025-10-18 15:06:47.742692-07
 (3 rows)
 
 
@@ -92,10 +92,10 @@ INSERT 0 1
 Now showing the ratings table AFTER the new rating is added.
  rating_id | user_id | song_id | stars |       comment       |          created_at           
 -----------+---------+---------+-------+---------------------+-------------------------------
-         1 |       1 |       1 |     5 | banger              | 2025-10-15 09:36:23.39-07
-         2 |       2 |       2 |     4 | solid               | 2025-10-15 09:36:23.393222-07
-         3 |       3 |       3 |     5 | iconic              | 2025-10-15 09:36:23.393544-07
-         4 |       4 |       1 |     5 | demo insert worked! | 2025-10-15 09:36:23.394063-07
+         1 |       1 |       1 |     5 | banger              | 2025-10-18 15:06:47.741668-07
+         2 |       2 |       2 |     4 | solid               | 2025-10-18 15:06:47.742512-07
+         3 |       3 |       3 |     5 | iconic              | 2025-10-18 15:06:47.742692-07
+         4 |       4 |       1 |     5 | demo insert worked! | 2025-10-18 15:06:47.74324-07
 (4 rows)
 
 
@@ -123,26 +123,30 @@ Now showing playlists AFTER the name update.
 We will show the playlist_songs table BEFORE removing a song.
  playlist_id | song_id | position 
 -------------+---------+----------
-(0 rows)
+           1 |       1 |        1
+           1 |       2 |        2
+           1 |       3 |        3
+(3 rows)
 
 
 Remove one song from the renamed playlist.
-DELETE 0
+DELETE 1
 
 Now showing the playlist_songs table AFTER one song was deleted.
  playlist_id | song_id | position 
 -------------+---------+----------
-(0 rows)
+           1 |       2 |        2
+           1 |       3 |        3
+(2 rows)
 
 
 --- SELECT #1: Join view (requirement 3) ---
 Public playlists with owners and songs (show 10).
- playlist_id |             name             | username |         title         | position 
--------------+------------------------------+----------+-----------------------+----------
-           1 | Cole All-Time Favorite Tunes | cole     | She's My Kind Of Girl |        1
-           1 | Cole All-Time Favorite Tunes | cole     | Andante, Andante      |        2
-           1 | Cole All-Time Favorite Tunes | cole     | As Good As New        |        3
-(3 rows)
+ playlist_id |             name             | username |      title       | position 
+-------------+------------------------------+----------+------------------+----------
+           1 | Cole All-Time Favorite Tunes | cole     | Andante, Andante |        2
+           1 | Cole All-Time Favorite Tunes | cole     | As Good As New   |        3
+(2 rows)
 
 
 --- SELECT #2: Aggregation (requirement 3) ---
