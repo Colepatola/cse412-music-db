@@ -3,13 +3,13 @@ Course: CSE 412
 Team: Cole Patola, Svar Ajwani, Mohsin Zaidi, Nassim Zitouni
 
 ## 1. ER-to-Relational (DDL)
-explain here
+Compelted in demo
 
 ## 2. Fill the database with data
-explain here
+Compelted in demo
 
 ## 3. SQL Queries
-explain here
+Compelted in demo
 
 ## 4. How to Reproduce
 1. start your db
