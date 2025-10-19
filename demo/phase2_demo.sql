@@ -64,7 +64,8 @@ ORDER BY rating_id; -- should show 3 ratings currently
 
 \qecho 'Add a new rating by nassim for the first song.'
 INSERT INTO music.ratings (user_id, song_id, stars, comment)
-VALUES (
+VALUES 
+(
   (SELECT user_id FROM music.users WHERE username = 'nassim'), -- nassim's user_id
   (SELECT song_id FROM music.songs ORDER BY song_id LIMIT 1),  -- first song_id from songs table
   5,                    -- 5 star rating for the song
