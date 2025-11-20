@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music DB App</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+   
+    .hidden { display: none !important; }
+    .card-action { margin-top: 1rem; }
+    .table-container { overflow-x: auto; }
+  </style>
+</head>
+<body>
+
+  <nav class="container-fluid hidden" id="nav-bar">
+    <ul>
+      <li><strong>MusicApp</strong></li>
+    </ul>
+    <ul>
+      <li><a href="#" onclick="app.router('search')">Search Songs</a></li>
+      <li><a href="#" onclick="app.router('playlists')">My Playlists</a></li>
+      <li><a href="#" role="button" class="secondary" onclick="app.logout()">Logout</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+<!-- login page -->
+    <section id="view-login">
+      <article>
+        <header><strong>Welcome to the Music App</strong></header>
+        <form id="login-form">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username (e.g., cole)" required>
+          <button type="submit">Login</button>
+        </form>
+      </article>
+    </section>
+<!-- search page -->
+    <section id="view-search" class="hidden">
+      <hgroup>
+        <h2>Discover Music</h2>
+        <h3>Search songs by title or artist</h3>
+      </hgroup>
+
+      <form id="search-form">
+        <div class="grid">
+          <input type="search" id="search-query" placeholder="Search query..." required>
+          <button type="submit">Search</button>
+        </div>
+      </form>
+
+      <div class="table-container">
+        <table role="grid">
+          <thead>
+            <tr>
+              <th>Song Title</th>
+              <th>Artist</th>
+              <th>Year</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="search-results-body">
+            </tbody>
+        </table>
+      </div>
+    </section>
+<!-- view and create playlist -->
+    <section id="view-playlists" class="hidden">
+      <div class="grid">
+        <h2>My Playlists</h2>
+        <button class="outline" onclick="app.toggleModal('modal-create-playlist')">+ New Playlist</button>
+      </div>
+
+      <div id="playlists-container">
+        <p aria-busy="true">Loading playlist...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <dialog id="modal-rate">
+    <article>
+      <header>
+        <a href="#close" aria-label="Close" class="close" onclick="app.toggleModal('modal-rate')"></a>
+        Rate this Song
+      </header>
+      <form id="rate-form">
+        <input type="hidden" id="rate-song-id">
+        
+        <label for="stars">Stars (1-5)</label>
+        <input type="number" id="stars" name="stars" min="1" max="5" required>
+        
+        <label for="comment">Comment (Optional)</label>
+        <textarea id="comment" name="comment" placeholder="What did you think?"></textarea>
+        
+        <button type="submit">Submit Rating</button>
+      </form>
+    </article>
+  </dialog>
+
+  <dialog id="modal-create-playlist">
+    <article>
+      <header>
+        <a href="#close" aria-label="Close" class="close" onclick="app.toggleModal('modal-create-playlist')"></a>
+        Create New Playlist
+      </header>
+      <form id="create-playlist-form">
+        <label for="playlist-name">Playlist Name</label>
+        <input type="text" id="playlist-name" name="name" required>
+        
+        <label for="is-public">
+          <input type="checkbox" id="is-public" name="is_public" checked>
+          Public Playlist
+        </label>
+        
+        <button type="submit">Create</button>
+      </form>
+    </article>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
