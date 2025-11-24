@@ -120,6 +120,26 @@
     </article>
   </dialog>
 
+  <dialog id="modal-add-to-playlist">
+    <article>
+      <header>
+        <a href="#close" aria-label="Close" class="close" onclick="app.toggleModal('modal-add-to-playlist')"></a>
+        Add Song to Playlist
+      </header>
+      <form id="add-to-playlist-form">
+        <input type="hidden" id="add-song-id">
+        <p>Adding: <strong id="add-song-title"></strong></p>
+        
+        <label for="playlist-select">Select Playlist</label>
+        <select id="playlist-select" name="playlist_id" required>
+          <option value="">Select a playlist...</option>
+        </select>
+        
+        <button type="submit">Add to Playlist</button>
+      </form>
+    </article>
+  </dialog>
+
   <script src="app.js"></script>
 </body>
 </html>

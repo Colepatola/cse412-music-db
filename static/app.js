@@ -9,6 +9,7 @@ const app = {
     document.getElementById('search-form').addEventListener('submit', app.handleSearch);
     document.getElementById('rate-form').addEventListener('submit', app.handleRateSubmit);
     document.getElementById('create-playlist-form').addEventListener('submit', app.handleCreatePlaylist);
+    document.getElementById('add-to-playlist-form').addEventListener('submit', app.handleAddToPlaylist);
   },
 
   router: (viewName) => {
@@ -81,6 +82,7 @@ const app = {
             <td>${song.release_year}</td>
             <td>
               <button class="outline contrast" onclick="app.openRateModal(${song.song_id})">Rate</button>
+              <button class="outline" onclick="app.openAddToPlaylistModal(${song.song_id}, '${song.title.replace(/'/g, "\\'")}')">Add to Playlist</button>
             </td>
           </tr>
         `;
@@ -139,21 +141,38 @@ const app = {
       return;
     }
 
-    playlists.forEach(pl => {
+    for (const pl of playlists) {
+      // Load songs for this playlist
+      const songsRes = await fetch(`/api/playlists/${pl.playlist_id}/songs`);
+      const songs = await songsRes.json();
+      
+      const songsList = songs.length > 0 
+        ? `<ul style="list-style: none; padding: 0; margin: 0;">${songs.map(s => `
+          <li style="margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1); list-style: none;">
+            <div><strong>${s.title}</strong> by ${s.artist_name || 'Unknown'} (${s.release_year || 'N/A'})</div>
+            <button class="outline secondary" onclick="app.removeSongFromPlaylist(${pl.playlist_id}, ${s.song_id})" style="margin-top: 0.5rem; padding: 0.25rem 0.75rem; font-size: 0.875rem;">Remove</button>
+          </li>
+        `).join('')}</ul>`
+        : '<p><em>No songs in this playlist yet.</em></p>';
+      
       const card = `
         <article>
           <header>
             <strong>${pl.name}</strong>
             ${pl.is_public ? '<span data-tooltip="Public">🌍</span>' : '🔒'}
           </header>
+          <div>
+            <h4>Songs (${songs.length}):</h4>
+            ${songsList}
+          </div>
           <div class="grid">
             <button class="outline secondary" onclick="app.deletePlaylist(${pl.playlist_id})">Delete</button>
-            <button onclick="app.renamePlaylist(${pl.playlist_id}, '${pl.name}')">Rename</button>
+            <button onclick="app.renamePlaylist(${pl.playlist_id}, '${pl.name.replace(/'/g, "\\'")}')">Rename</button>
           </div>
         </article>
       `;
       container.insertAdjacentHTML('beforeend', card);
-    });
+    }
   },
 
   handleCreatePlaylist: async (e) => {
@@ -195,6 +214,66 @@ const app = {
         body: JSON.stringify({ name: newName })
       });
       app.loadPlaylists();
+    }
+  },
+
+  openAddToPlaylistModal: async (songId, songTitle) => {
+    document.getElementById('add-song-id').value = songId;
+    document.getElementById('add-song-title').textContent = songTitle;
+    
+    // Load user's playlists
+    const res = await fetch(`/api/playlists?user_id=${app.state.currentUserId}`);
+    const playlists = await res.json();
+    
+    const select = document.getElementById('playlist-select');
+    select.innerHTML = '<option value="">Select a playlist...</option>';
+    playlists.forEach(pl => {
+      const option = document.createElement('option');
+      option.value = pl.playlist_id;
+      option.textContent = pl.name;
+      select.appendChild(option);
+    });
+    
+    app.toggleModal('modal-add-to-playlist');
+  },
+
+  handleAddToPlaylist: async (e) => {
+    e.preventDefault();
+    const songId = document.getElementById('add-song-id').value;
+    const playlistId = document.getElementById('playlist-select').value;
+    
+    if (!playlistId) {
+      alert('Please select a playlist');
+      return;
+    }
+    
+    const res = await fetch(`/api/playlists/${playlistId}/songs`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ song_id: parseInt(songId) })
+    });
+    
+    if (res.ok) {
+      alert('Song added to playlist successfully');
+      app.toggleModal('modal-add-to-playlist');
+      app.loadPlaylists();
+    } else {
+      const data = await res.json();
+      alert(data.error || 'Failed to add song to playlist');
+    }
+  },
+
+  removeSongFromPlaylist: async (playlistId, songId) => {
+    if (!confirm("Remove this song from the playlist?")) return;
+    
+    const res = await fetch(`/api/playlists/${playlistId}/songs/${songId}`, {
+      method: 'DELETE'
+    });
+    
+    if (res.ok) {
+      app.loadPlaylists();
+    } else {
+      alert('Failed to remove song');
     }
   }
 };
