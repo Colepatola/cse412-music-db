@@ -1,0 +1,167 @@
+=== PHASE 2 DEMO ===
+Below are the requirements that we will demonstrate:
+1) Build schema (ER -> Relational).
+2) Load CSV with COPY (no GUI yet).
+3) Show INSERT, UPDATE, DELETE and SELECTs.
+
+--- STEP 1: Build schema (requirement 1) ---
+Running db/ddl.sql...
+This file creates all of our tables from the ERD (users, songs, artists, playlists, ratings, genre).
+It sets up primary keys, foreign keys, and indexes to link everything properly.
+This satisfies the “ER to Relational” requirement by showing we built the full schema in SQL.
+DROP SCHEMA
+CREATE SCHEMA
+SET
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+Succeeded: schema, keys, FKs, indexes properly loaded.
+
+--- STEP 2: Load CSV (requirement 2) ---
+Running db/copy_load.sql...
+This file loads our Spotify CSV into the database using COPY.
+It stages the data, cleans it, and inserts it into songs, artists, and song_artists tables.
+This satisfies the “Fill database with data” requirement since we populate tables using SQL only.
+SET
+DROP TABLE
+CREATE TABLE
+COPY 236988
+DROP VIEW
+CREATE VIEW
+INSERT 0 236988
+DROP TABLE
+SELECT 1215578
+CREATE INDEX
+CREATE INDEX
+INSERT 0 30945
+INSERT 0 1167463
+Succeeded: CSV loaded and normalized properly.
+
+--- Counts after load (checking if everything is working) ---
+ songs  | artists | song_artist_links 
+--------+---------+-------------------
+ 236988 |   30945 |           1167463
+(1 row)
+
+
+--- STEP 3: Seed small demo data ---
+Running db/seed_minimal.sql...
+This file adds a few demo users, playlists, and ratings so we can show CRUD queries next.
+It helps us run realistic INSERT, UPDATE, and DELETE demos with linked data.
+SET
+INSERT 0 4
+INSERT 0 2
+INSERT 0 3
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+Succeeded: demo users, playlists, ratings added properly.
+
+--- Counts after seed (checking if everything is working) ---
+ users | playlists | playlist_songs | ratings 
+-------+-----------+----------------+---------
+     4 |         2 |              3 |       3
+(1 row)
+
+
+--- DEMO: INSERT (requirement 3) ---
+We will first show the ratings table BEFORE the new rating is added.
+ rating_id | user_id | song_id | stars | comment |          created_at           
+-----------+---------+---------+-------+---------+-------------------------------
+         1 |       1 |       1 |     5 | banger  | 2025-10-25 12:06:38.615477-07
+         2 |       2 |       2 |     4 | solid   | 2025-10-25 12:06:38.616639-07
+         3 |       3 |       3 |     5 | iconic  | 2025-10-25 12:06:38.616836-07
+(3 rows)
+
+
+Add a new rating by nassim for the first song.
+INSERT 0 1
+
+Now showing the ratings table AFTER the new rating is added.
+ rating_id | user_id | song_id | stars |       comment       |          created_at           
+-----------+---------+---------+-------+---------------------+-------------------------------
+         1 |       1 |       1 |     5 | banger              | 2025-10-25 12:06:38.615477-07
+         2 |       2 |       2 |     4 | solid               | 2025-10-25 12:06:38.616639-07
+         3 |       3 |       3 |     5 | iconic              | 2025-10-25 12:06:38.616836-07
+         4 |       4 |       1 |     5 | demo insert worked! | 2025-10-25 12:06:38.61768-07
+(4 rows)
+
+
+--- DEMO: UPDATE (requirement 3) ---
+We will show playlists BEFORE the name update.
+ playlist_id |      name      | owner_id 
+-------------+----------------+----------
+           1 | Cole Favorites |        1
+           2 | Svar Study Mix |        2
+(2 rows)
+
+
+Rename "Cole Favorites" to "Cole All-Time Favorite Tunes".
+UPDATE 1
+
+Now showing playlists AFTER the name update.
+ playlist_id |             name             | owner_id 
+-------------+------------------------------+----------
+           1 | Cole All-Time Favorite Tunes |        1
+           2 | Svar Study Mix               |        2
+(2 rows)
+
+
+--- DEMO: DELETE (requirement 3) ---
+We will show the playlist_songs table BEFORE removing a song.
+ playlist_id | song_id | position 
+-------------+---------+----------
+           1 |       1 |        1
+           1 |       2 |        2
+           1 |       3 |        3
+(3 rows)
+
+
+Remove one song from the renamed playlist.
+DELETE 1
+
+Now showing the playlist_songs table AFTER one song was deleted.
+ playlist_id | song_id | position 
+-------------+---------+----------
+           1 |       2 |        2
+           1 |       3 |        3
+(2 rows)
+
+
+--- SELECT #1: Join view (requirement 3) ---
+Public playlists with owners and songs (show 10).
+ playlist_id |             name             | username |      title       | position 
+-------------+------------------------------+----------+------------------+----------
+           1 | Cole All-Time Favorite Tunes | cole     | Andante, Andante |        2
+           1 | Cole All-Time Favorite Tunes | cole     | As Good As New   |        3
+(2 rows)
+
+
+--- SELECT #2: Aggregation (requirement 3) ---
+Avg stars and count per song (top 3).
+ song_id |         title         | avg_stars | num_ratings 
+---------+-----------------------+-----------+-------------
+       1 | She's My Kind Of Girl |      5.00 |           2
+       3 | As Good As New        |      5.00 |           1
+       2 | Andante, Andante      |      4.00 |           1
+(3 rows)
+
+
+=== DONE ===
+To conclude, this demo showed everything required for Phase 2.
+We built the full database schema from our ERD, loaded real data from a CSV,
+added demo users and playlists, and ran SQL queries showing INSERT, UPDATE, DELETE, and 2 SELECT statements.
+For each change, we displayed the database before and after, so you can visually confirm everything is working.
+This proves that our database is fully functional and meets all Phase 2 requirements. Thank you for your time!
