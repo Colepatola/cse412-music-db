@@ -2,7 +2,7 @@ This repo contains the SQL schema (DDL), data loading scripts, demo queries, and
 
 ## Quick Start
 
-### Option 1: Run SQL Demo Only
+### Option 1: Run SQL Demo Only (PHASE 2)
 
 Clone the repository and run the following command to reproduce the Phase 2 demo:
 
@@ -12,7 +12,7 @@ psql -d "$USER" -v ON_ERROR_STOP=1 \
   -o report/phase2_output.txt
 ```
 
-### Option 2: Run Full Web Application
+### Option 2: Run Full Web Application (PHASE 3)
 
 #### Prerequisites
 
@@ -62,11 +62,11 @@ The server uses these defaults:
 - Database: Your username (from `$USER` environment variable)
 - User: Your username
 
-To override these defaults, set environment variables:
+To override these defaults, set environment variables (for example, if you need to switch to port 8888):
 
 ```bash
 export DB_HOST=localhost
-export DB_PORT=5432
+export DB_PORT=8888
 export DB_NAME=mydb
 export DB_USER=myuser
 ```
